@@ -1,0 +1,16 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+*.onnx
+*.pt
+
+outputs/
+
+.idea/
+.vscode/
+
+*.mp4
+*.avi
