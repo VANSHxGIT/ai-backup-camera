@@ -5,6 +5,24 @@ cap = cv2.VideoCapture(0)
 if not cap.isOpened():
     print("Could not open camera.")
     exit()
+
+# Define source points
+src_points = np.float32([
+    [300, 400],
+    [500, 400],
+    [700, 550],
+    [100, 550]
+])
+# Define destination points
+dst_points = np.float32([
+    [200, 0],
+    [600, 0],
+    [600, 600],
+    [200, 600]
+])
+# Compute transformation matrix
+matrix = cv2.getPerspectiveTransform(src_points, dst_points)
+
 while True:
     # Read frame
     ret, frame = cap.read()
@@ -13,22 +31,6 @@ while True:
         break
     # Resize frame
     frame = cv2.resize(frame, (800, 600))
-    # Define source points
-    src_points = np.float32([
-        [300, 400],
-        [500, 400],
-        [700, 550],
-        [100, 550]
-    ])
-    # Define destination points
-    dst_points = np.float32([
-        [200, 0],
-        [600, 0],
-        [600, 600],
-        [200, 600]
-    ])
-    # Compute transformation matrix
-    matrix = cv2.getPerspectiveTransform(src_points, dst_points)
     # Apply perspective warp
     bird_eye = cv2.warpPerspective(frame, matrix, (800, 600))
     # Draw red points on original frame

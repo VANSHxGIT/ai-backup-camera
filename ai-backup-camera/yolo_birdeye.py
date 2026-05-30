@@ -8,6 +8,29 @@ cap = cv2.VideoCapture(0)
 if not cap.isOpened():
     print("Could not open webcam.")
     exit()
+
+# -------------------------------
+# Perspective Transform Setup
+# -------------------------------
+src_points = np.float32([
+    [300, 400],
+    [500, 400],
+    [700, 550],
+    [100, 550]
+])
+dst_points = np.float32([
+    [200, 0],
+    [600, 0],
+    [600, 600],
+    [200, 600]
+])
+
+# Compute transformation matrix
+matrix = cv2.getPerspectiveTransform(
+    src_points,
+    dst_points
+)
+
 while True:
     ret, frame = cap.read()
     if not ret:
@@ -21,26 +44,7 @@ while True:
     results = model(frame)
     # Draw detection boxes
     detected_frame = results[0].plot()
-    # -------------------------------
-    # Perspective Transform
-    # -------------------------------
-    src_points = np.float32([
-        [300, 400],
-        [500, 400],
-        [700, 550],
-        [100, 550]
-    ])
-    dst_points = np.float32([
-        [200, 0],
-        [600, 0],
-        [600, 600],
-        [200, 600]
-    ])
-    # Compute transformation matrix
-    matrix = cv2.getPerspectiveTransform(
-        src_points,
-        dst_points
-    )
+
     # Apply bird-eye warp
     bird_eye = cv2.warpPerspective(
         detected_frame,
